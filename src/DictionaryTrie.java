@@ -2,9 +2,13 @@
  * @author Graham McAllister
  * @version 1.0
  *
- * My implementation of a trie
+ * My implementation of a trie specialized for use as a dictionary
+ * It is a singly-linked list implementation to minimize memory usage
+ * Each node is comprised of three items (value, next, child)
  */
-public class MyTrie<String> implements Trie<String> {
+public class DictionaryTrie implements Trie {
+
+    private class Node()
 
     public Boolean add(String word) {
         //TODO

@@ -4,16 +4,16 @@
  *
  * Trie interface
  */
-public interface Trie<String> {
+public interface Trie<T> {
 
-    Boolean add(String word);
+    Boolean add(T word);
 
-    Boolean isPrefix(String seq);
+    Boolean isPrefix(T seq);
 
-    Boolean contains(String word);
+    Boolean contains(T word);
 
-    int count(String word);
+    int count(T word);
 
-    int countPrefixes(String word);
+    int countPrefixes(T word);
 
 }

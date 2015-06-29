@@ -24,7 +24,7 @@ public class Entry {
      * Replaces the text of Entry with the newText parameter
      * @param newText           new body text for Entry
      */
-    public void edit(String newText) {
+    public void setBody(String newText) {
         body = newText;
     }
 
@@ -36,6 +36,32 @@ public class Entry {
         title = newTitle;
     }
 
+    /**
+     * Public getter to return the title of Entry
+     * @return String           the title of Entry
+     */
+    public String getTitle() {
+        return title;
+    }
 
+    /**
+     * Public getter to return the body of Entry
+     * @return String           the body of Entry
+     */
+    public String getBody() {
+        return body;
+    }
 
+    /**
+     * Public getter to return the date of Entry
+     * @return LocalDateTime          the date of Entry
+     */
+    public LocalDateTime getDate() {
+        return created;
+    }
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }
