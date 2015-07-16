@@ -10,6 +10,8 @@ import javafx.scene.layout.VBox;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
  * @author Graham McAllister
@@ -26,6 +28,10 @@ public class MyFirstTrie extends Application {
     /** tableView for entries */
     private ListView entryList;
 
+    //Other data
+    private Trie entryTrie;
+    private Trie dictionary;
+
     /** Buttons */
     private Button sortDate;
     private Button search;
@@ -36,6 +42,7 @@ public class MyFirstTrie extends Application {
     /** Labels and other control elements */
     private Label title;
     private Label titleLabel;
+    private ContextMenu autocompleteBox;
     private TextField searchBar;
     private TextArea body;
     private TextField titleName;
@@ -65,6 +72,7 @@ public class MyFirstTrie extends Application {
         newEntry = new Button("New");
         title = new Label("Title: ");
         titleLabel = new Label();
+        autocompleteBox = new ContextMenu();
         searchBar = new TextField();
         titleName = new TextField();
         body = new TextArea();
@@ -75,10 +83,21 @@ public class MyFirstTrie extends Application {
         entryBlock = new VBox();
         FilteredList<Entry> filteredData = new FilteredList<Entry>(masterData);
         SortedList<Entry> sortedData = new SortedList<Entry>(filteredData);
-        entryList = new ListView(sortedData);
+        entryList = new ListView<>(sortedData);
+        searchBar.setContextMenu(autocompleteBox);
+
+        //Instantiating data in tries
+        dictionary = new SimpleTrie();
+        entryTrie = new PatriciaTrie();
+        //loadDict(dictionary);
 
         //Set so you can select multiple entries
 //        entryList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        //TODO - TextFormatter to restrict the Entry title input
+        //TextFormatter titleREGEX = new TextFormatter()
+//        Pattern titleREGEX = Pattern.compile("[a-zA-Z0-9]+");
+//        titleName.setTextFormatter(titleREGEX);
 
         //Adding action events
         sortDate.setOnMouseClicked(e -> {
@@ -113,10 +132,13 @@ public class MyFirstTrie extends Application {
             newEntry.setBody(body.getText());
             newEntry.setTitle(titleName.getText());
             masterData.add(newEntry);
+            entryTrie.add(titleName.getText());
         });
 
-
+        //TODO - Search bar behavior (add changeListener) for dialogue popUp
         searchBar.textProperty().addListener(((observable, oldValue, newValue) -> {
+
+            populateSearch(newValue);
 
             //Change data
             filteredData.setPredicate(entry -> {
@@ -161,6 +183,10 @@ public class MyFirstTrie extends Application {
 
     public static void main(String[] args) {
         Application.launch(args);
+    }
+
+    private void populateSearch(String seq) {
+
     }
 
 }

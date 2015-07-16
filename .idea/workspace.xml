@@ -2,12 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5e075020-3a91-487b-a6d5-90036f0283f7" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/SimpleTrieTest.java" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/src/TrieTest.java" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/DictionaryTrie.java" afterPath="$PROJECT_DIR$/src/PatriciaTrie.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/MyFirstTrie.java" afterPath="$PROJECT_DIR$/src/MyFirstTrie.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/SimpleTrie.java" afterPath="$PROJECT_DIR$/src/SimpleTrie.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Trie.java" afterPath="$PROJECT_DIR$/src/Trie.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="MyFirstTrie.iws" />
@@ -573,7 +567,13 @@
       <option name="project" value="LOCAL" />
       <updated>1435619011859</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Simple trie done and tested">
+      <created>1437084030196</created>
+      <option name="number" value="00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1437084030196</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -647,7 +647,8 @@
     <MESSAGE value="new commitments" />
     <MESSAGE value="Need to make trie and finish GUI" />
     <MESSAGE value="GUI is done but needs formatting.  Working on SimpleTrie" />
-    <option name="LAST_COMMIT_MESSAGE" value="GUI is done but needs formatting.  Working on SimpleTrie" />
+    <MESSAGE value="Simple trie done and tested" />
+    <option name="LAST_COMMIT_MESSAGE" value="Simple trie done and tested" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
