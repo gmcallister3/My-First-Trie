@@ -11,17 +11,22 @@ import java.util.ArrayList;
  * @author Graham McAllister
  * @version 1.0
  */
-public class SimpleTrieTest {
+public class TrieTest {
 
     //Instance stuff
     SimpleTrie trie;
+    PatriciaTrie trie2;
+    String[] stringSet = {"all", "all over", "great", "Greatness", "Hall", "Help"};
     String[] stringSet1 = {"Baby", "Babble", "Acid", "Junior", "jam", "jasmine"};
     String[] stringSet2 = {"gap", "god", "gods", "gold", "gone", "gun"};
 
     @Before
     public void setup() {
         trie = new SimpleTrie();
+        trie2 = new PatriciaTrie();
     }
+
+    //Testing SimpleTrie
 
     @Test
     public void testEmpty() {
@@ -116,4 +121,72 @@ public class SimpleTrieTest {
         assertFalse(trie.isPrefix("pre"));
     }
 
+    //Testing PatriciaTrie
+    @Test
+    public void testAdding1() {
+        assertEquals(0, trie2.size());
+        assertFalse(trie2.contains("hello"));
+        assertTrue(trie2.add("Hello"));
+        assertTrue(trie2.contains("hello"));
+        assertTrue(trie2.contains("Hello"));
+        assertEquals(1, trie2.size());
+    }
+
+    @Test
+    public void testAddMany() {
+        for (String exp : stringSet) {
+            assertTrue(trie2.add(exp));
+        }
+        assertEquals(stringSet.length, trie2.size());
+        assertTrue(trie2.contains("all"));
+        assertTrue(trie2.contains("all over"));
+        assertTrue(trie2.contains("hall"));
+        assertTrue(trie2.contains("help"));
+        assertFalse(trie2.contains("h"));
+        assertTrue(trie2.isPrefix("all"));
+    }
+
+    @Test
+    public void testCount2() {
+        for (String exp : stringSet) {
+            assertTrue(trie2.add(exp));
+        }
+        assertEquals(2, trie2.count("h"));
+        assertEquals(2, trie2.count("g"));
+        assertEquals(2, trie2.count("great"));
+        assertEquals(1, trie2.count("all ov"));
+    }
+
+    @Test
+    public void testIsPrefix() {
+        for (String exp : stringSet) {
+            assertTrue(trie2.add(exp));
+        }
+        assertFalse(trie2.isPrefix("x"));
+        assertFalse(trie2.isPrefix("halls"));
+        assertTrue(trie2.isPrefix("grea"));
+        assertTrue(trie2.isPrefix("all "));
+    }
+
+    @Test
+    public void testExpressions() {
+        for (String exp : stringSet) {
+            assertTrue(trie2.add(exp));
+        }
+        ArrayList<String> aExp = trie2.expressions("all");
+        System.out.println("all- expressions: ");
+        for (String exp : aExp) {
+            System.out.println(exp);
+        }
+        ArrayList<String> hExp = trie2.expressions("ha");
+        System.out.println("ha- expressions: ");
+        for (String exp : hExp) {
+            System.out.println(exp);
+        }
+        ArrayList<String> gExp = trie2.expressions("great");
+        System.out.println("great- expressions: ");
+        for (String exp : gExp) {
+            System.out.println(exp);
+        }
+    }
 }

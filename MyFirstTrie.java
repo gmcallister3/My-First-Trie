@@ -96,7 +96,7 @@ public class MyFirstTrie extends Application {
 
         //TODO - TextFormatter to restrict the Entry title input
         //TextFormatter titleREGEX = new TextFormatter()
-//        Pattern titleREGEX = Pattern.compile("[a-zA-Z0-9]+");
+//        Pattern titleREGEX = Pattern.compile("[a-zA-Z0-9\s]+");
 //        titleName.setTextFormatter(titleREGEX);
 
         //Adding action events

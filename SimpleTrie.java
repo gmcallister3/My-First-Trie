@@ -71,6 +71,9 @@ public class SimpleTrie implements Trie {
      * a = 0010
      * z = 0035
      * </P>
+     *
+     * @param c            character whose index it will retrieve
+     * @return             int index value
      */
     private int getInd(Character c) {
         int i = Character.getNumericValue(c);
