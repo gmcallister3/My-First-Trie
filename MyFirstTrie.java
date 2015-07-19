@@ -10,6 +10,9 @@ import javafx.scene.layout.VBox;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
+
+import java.util.ArrayList;
+import java.io.FileNotFoundException;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
@@ -29,8 +32,8 @@ public class MyFirstTrie extends Application {
     private ListView entryList;
 
     //Other data
-    private Trie entryTrie;
-    private Trie dictionary;
+    private PatriciaTrie entryTrie;
+    private SimpleTrie dictionary;
 
     /** Buttons */
     private Button sortDate;
@@ -62,7 +65,7 @@ public class MyFirstTrie extends Application {
      * Application viewer controller
      * @param primaryStage            GUI application window
      */
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws FileNotFoundException {
 
         //Instantiating scene elements and other stuff
         sortDate = new Button("Sort by Date");
@@ -89,7 +92,7 @@ public class MyFirstTrie extends Application {
         //Instantiating data in tries
         dictionary = new SimpleTrie();
         entryTrie = new PatriciaTrie();
-        //loadDict(dictionary);
+        DictionaryLoader.loadDict(dictionary);
 
         //Set so you can select multiple entries
 //        entryList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -135,10 +138,17 @@ public class MyFirstTrie extends Application {
             entryTrie.add(titleName.getText());
         });
 
+        //Add change listener to body text, checks if each word is in the dictionary
+        body.textProperty().addListener(((observable1, oldValue1, newValue1) -> {
+            //Format text
+            System.out.println(dictionary.contains(newValue1));
+        }));
+
         //TODO - Search bar behavior (add changeListener) for dialogue popUp
         searchBar.textProperty().addListener(((observable, oldValue, newValue) -> {
 
-            populateSearch(newValue);
+            //Get strings to display in searchSuggestion
+            ArrayList<String> searchData = entryTrie.expressions(newValue);
 
             //Change data
             filteredData.setPredicate(entry -> {
