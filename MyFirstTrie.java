@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.io.FileNotFoundException;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import javafx.geometry.Side;
 
 /**
  * @author Graham McAllister
@@ -84,15 +85,18 @@ public class MyFirstTrie extends Application {
         root = new HBox();
         sidePane = new VBox();
         entryBlock = new VBox();
-        FilteredList<Entry> filteredData = new FilteredList<Entry>(masterData);
-        SortedList<Entry> sortedData = new SortedList<Entry>(filteredData);
-        entryList = new ListView<>(sortedData);
         searchBar.setContextMenu(autocompleteBox);
 
         //Instantiating data in tries
         dictionary = new SimpleTrie();
         entryTrie = new PatriciaTrie();
+        //Load data
         DictionaryLoader.loadDict(dictionary);
+        EntryLoader.loadEntries(masterData, entryTrie);
+        FilteredList<Entry> filteredData = new FilteredList<Entry>(masterData);
+        SortedList<Entry> sortedData = new SortedList<Entry>(filteredData);
+        entryList = new ListView<>(sortedData);
+        System.out.println(dictionary.size());
 
         //Set so you can select multiple entries
 //        entryList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -101,6 +105,8 @@ public class MyFirstTrie extends Application {
         //TextFormatter titleREGEX = new TextFormatter()
 //        Pattern titleREGEX = Pattern.compile("[a-zA-Z0-9\s]+");
 //        titleName.setTextFormatter(titleREGEX);
+        //Regex for checking if the string is totally alphabetic
+        Pattern alphabetic = Pattern.compile("[a-zA-Z]*");
 
         //Adding action events
         sortDate.setOnMouseClicked(e -> {
@@ -135,21 +141,49 @@ public class MyFirstTrie extends Application {
             newEntry.setBody(body.getText());
             newEntry.setTitle(titleName.getText());
             masterData.add(newEntry);
+            //Add the title to the trie for searching purposes
             entryTrie.add(titleName.getText());
         });
 
         //Add change listener to body text, checks if each word is in the dictionary
+        //TODO - Check individual words?
         body.textProperty().addListener(((observable1, oldValue1, newValue1) -> {
-            //Format text
-            System.out.println(dictionary.contains(newValue1));
+            //Split the observed text into individual words
+            //Check if the new value is non alphabetic (representing a new word)
+//            String word = newValue1;
+//            if (!word.isEmpty()) {
+//                Matcher m = alphabetic.matcher(word);
+//                //If symbol doesn't match, shift index to start new word
+//                if (!m.matches()) {
+//                    //Find last mismatch index
+//                    int beginInd = m.end();
+//                    System.out.println(beginInd);
+//                    word = word.substring(beginInd);
+//                }
+//            }
+            //Color determinant if the typed word is in dictionary
+            if (dictionary.contains(newValue1)) {
+                body.setStyle("-fx-text-fill: green");
+
+            } else {
+                body.setStyle("-fx-text-fill: firebrick");
+            }
         }));
 
-        //TODO - Search bar behavior (add changeListener) for dialogue popUp
+        //Add change listener to searchBar for filtering and autocomplete purposes
         searchBar.textProperty().addListener(((observable, oldValue, newValue) -> {
-
+            autocompleteBox.hide();
+            autocompleteBox.getItems().clear();
             //Get strings to display in searchSuggestion
-            ArrayList<String> searchData = entryTrie.expressions(newValue);
-
+            if (!newValue.equals("") && entryTrie.isPrefix(newValue)) {
+                ArrayList<String> searchData = entryTrie.expressions(newValue);
+                //Display searchData in popup menu
+                for (String entry : searchData) {
+                    MenuItem title = new MenuItem(entry);
+                    autocompleteBox.getItems().addAll(title);
+                }
+                autocompleteBox.show(searchBar, Side.BOTTOM, 0, 0);
+            }
             //Change data
             filteredData.setPredicate(entry -> {
                 //If value in search bar is empty or null, don't filter

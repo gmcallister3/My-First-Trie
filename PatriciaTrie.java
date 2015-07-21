@@ -124,7 +124,7 @@ public class PatriciaTrie implements Trie {
                         Node newNode2 = new Node(node2Exp);
                         //Alter the parent node
                         n.expression = false;
-                        n.text = nodeExp.substring(0, j);
+                        n.text = nodeExp.substring(0, nodeInd);
                         //Change pointers
                         n.children[node1Ind] = newNode1;
                         newNode1.expression = true;
@@ -161,27 +161,42 @@ public class PatriciaTrie implements Trie {
      */
     public Boolean isPrefix(String seq) {
         seq = seq.toLowerCase();
-        char lastChar = seq.charAt(seq.length() - 1);
+        //char lastChar = seq.charAt(seq.length() - 1);
         Node n = getCur(seq);
         //If n is null return false
         if (n == null) {
             return false;
         }
         ArrayList<Node> children = n.getChildren();
-        //If the last letter of seq and n.text don't match, check n.expression or children
-        if (n.text.charAt(n.text.length() - 1) != lastChar) {
-            return n.expression || !(children.isEmpty());
+        String travWord = compress(traversed);
+        //Check if root
+        if (n.text.equals("-")) {
+            return false;
+        //If the sequence length is shorter than traversed check n.expression
+        } else {
+            //Compare all letters in prefix with travWord
+            char[] prefixLetters = seq.toCharArray();
+            char[] traversedLetters = travWord.toCharArray();
+            //Find which length is shorter
+            int shortestLength = (prefixLetters.length < traversedLetters.length) ? prefixLetters.length : traversedLetters.length;
+            for (int i = 0; i < shortestLength; i++) {
+                if (prefixLetters[i] != traversedLetters[i]) {
+                    return false;
+                }
+            }
+            //If run through all letters check expression and children
+            return !children.isEmpty() || n.expression;
         }
-        //Otherwise return true if node has children
-        return !children.isEmpty();
     }
 
     public ArrayList<String> expressions(String prefix) {
         String normedPrefix = prefix.toLowerCase();
         Node curNode = getCur(prefix);
-        //If there is
+        //If there is an element traversed, then removeLast since it will be added in recur
         //Remove the curNode from traversed list because it will be added in recur
-        traversed.removeLast();
+        if (traversed.size() > 0) {
+            traversed.removeLast();
+        }
         //curNode will point to node of last char in prefix
         //Use recursive helper DFS function to get words by passing in curNode
         recur(curNode);
@@ -321,16 +336,21 @@ public class PatriciaTrie implements Trie {
             char letter = prefix.charAt(i);
             int childInd = getInd(letter);
             Node n = curNode.children[childInd];
+            //If n is null then return curNode
+            if (n == null) {
+                return n;
+            }
             //If the text is a single character
-            if (n != null && n.text.length() == 1) {
+            if (n.text.length() == 1) {
                 //If on the last letter of prefix
                 if (i == prefix.length() - 1) {
+                    traversed.add(n.text);
                     return n;
                 }
                 //Otherwise keep searching
                 traversed.addLast(n.text);
                 //If the text is more than a single character, check the end of n.text
-            } else if (n != null && n.text.length() > 1) {
+            } else if (n.text.length() > 1) {
                 //If the last letter of n.text matches prefix
                 int skippedInd = i + n.text.length() - 1;
                 //If the last letter of prefix matches the last letter in node, check if the node makes a word
@@ -343,6 +363,10 @@ public class PatriciaTrie implements Trie {
                         //keep checking using skippedInd
                         i = skippedInd;
                         traversed.add(n.text);
+                    } else {
+                        //Otherwise return n
+                        traversed.add(n.text);
+                        return n;
                     }
                 //If prefix lays somewhere in n.text
                 } else {

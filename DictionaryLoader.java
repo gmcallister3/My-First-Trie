@@ -3,6 +3,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 /**
+ * Reads in the english dictionary txt file and loads the words into the trie
  * @author Graham McAllister
  * @version 1.0
  */

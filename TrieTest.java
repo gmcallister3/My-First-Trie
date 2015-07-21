@@ -17,6 +17,9 @@ public class TrieTest {
     SimpleTrie trie;
     PatriciaTrie trie2;
     String[] stringSet = {"all", "all over", "great", "Greatness", "Hall", "Help"};
+    String[] entryTitles = {"Golfers are playing", "Golf", "Games", "Golfing community",
+            "TODO", "Tiger Woods", "Tries", "Golf British Open", "Treaps", "Trees", "Happy birthday",
+            "Home for sale", "Hope scholarship"};
     String[] stringSet1 = {"Baby", "Babble", "Acid", "Junior", "jam", "jasmine"};
     String[] stringSet2 = {"gap", "god", "gods", "gold", "gone", "gun"};
 
@@ -166,6 +169,7 @@ public class TrieTest {
         assertFalse(trie2.isPrefix("halls"));
         assertTrue(trie2.isPrefix("grea"));
         assertTrue(trie2.isPrefix("all "));
+        assertFalse(trie2.isPrefix("goober"));
     }
 
     @Test
@@ -186,6 +190,28 @@ public class TrieTest {
         ArrayList<String> gExp = trie2.expressions("great");
         System.out.println("great- expressions: ");
         for (String exp : gExp) {
+            System.out.println(exp);
+        }
+    }
+
+    @Test
+    public void testExpressions2() {
+        for (String exp : entryTitles) {
+            assertTrue(trie2.add(exp));
+        }
+        ArrayList<String> gExp = trie2.expressions("golf");
+        System.out.println("golf- expressions: ");
+        for (String exp : gExp) {
+            System.out.println(exp);
+        }
+        ArrayList<String> tExp = trie2.expressions("tr");
+        System.out.println("tr- expressions: ");
+        for (String exp : tExp) {
+            System.out.println(exp);
+        }
+        ArrayList<String> hExp = trie2.expressions("ho");
+        System.out.println("ho- expressions: ");
+        for (String exp : hExp) {
             System.out.println(exp);
         }
     }
